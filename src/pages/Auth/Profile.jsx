@@ -92,7 +92,7 @@ const Profile = () => {
             <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 text-center">
               {!isStudent && profileData.logo_url ? (
                 <img 
-                  src={`${import.meta.env.VITE_API_URL.replace('/api', '')}/${profileData.logo_url}`} 
+                  src={profileData.logo_url} 
                   alt="Logo" 
                   className="w-24 h-24 mx-auto object-contain rounded-2xl shadow-md mb-4 bg-gray-50 p-2"
                 />
@@ -107,7 +107,7 @@ const Profile = () => {
               
               {isStudent ? (
                 profileData.cv_url ? (
-                  <a href={`${import.meta.env.VITE_API_URL.replace('/api', '')}/${profileData.cv_url}`} target="_blank" rel="noreferrer" className="inline-flex items-center justify-center w-full gap-2 px-4 py-2.5 bg-blue-50 text-[#007db3] font-bold rounded-xl hover:bg-[#007db3] hover:text-white transition-colors border border-blue-100 hover:border-transparent text-sm">
+                  <a href={profileData.cv_url} target="_blank" rel="noreferrer" className="inline-flex items-center justify-center w-full gap-2 px-4 py-2.5 bg-blue-50 text-[#007db3] font-bold rounded-xl hover:bg-[#007db3] hover:text-white transition-colors border border-blue-100 hover:border-transparent text-sm">
                     <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
                     Xem Hồ sơ CV
                   </a>

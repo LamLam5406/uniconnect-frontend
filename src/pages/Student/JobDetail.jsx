@@ -45,7 +45,7 @@ const JobDetail = () => {
 
   const companyProfile = job.company?.CompanyProfiles?.[0] || {};
   const companyName = companyProfile.company_name || job.company?.email || 'Công ty bảo mật tên';
-  const logoUrl = companyProfile.logo_url ? `${import.meta.env.VITE_API_URL.replace('/api', '')}/${companyProfile.logo_url}` : null;
+  const logoUrl = companyProfile.logo_url || null;
   const isPastDeadline = job.deadline ? new Date(job.deadline) < new Date() : false;
   const isClosed = job.status === 'closed' || isPastDeadline;
 

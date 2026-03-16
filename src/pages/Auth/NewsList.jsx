@@ -27,11 +27,11 @@ const NewsList = () => {
 
   const handleDelete = async (id) => {
     if (!window.confirm('BẠN CÓ CHẮC CHẮN MUỐN XÓA BÀI VIẾT NÀY?')) return;
-    
+
     try {
       await newsApi.deleteNews(id);
       toast.success('Đã xóa bài viết!');
-      fetchNews(); 
+      fetchNews();
     } catch (error) {
       toast.error(error.response?.data?.error || 'Lỗi khi xóa bài viết');
     }
@@ -43,7 +43,7 @@ const NewsList = () => {
 
   return (
     <div className="max-w-[1400px] w-full mx-auto px-4 py-8">
-      
+
       {/* Header chỉ còn nút Thêm bài viết (Dành cho Admin) */}
       {user?.role === 'admin' && (
         <div className="flex justify-end mb-6">
@@ -64,13 +64,13 @@ const NewsList = () => {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
           {newsList.map((news) => (
             <div key={news.id} className="group bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden hover:shadow-xl hover:border-blue-300 transition-all duration-300 flex flex-col">
-              
+
               {/* Ảnh bìa nhỏ hơn (h-40 thay vì h-56) */}
               <div className="h-40 bg-slate-100 overflow-hidden relative border-b border-slate-100">
                 {news.cover_image ? (
-                  <img 
-                    src={`${import.meta.env.VITE_API_URL.replace('/api', '')}/${news.cover_image}`} 
-                    alt={news.title} 
+                  <img
+                    src={news.cover_image}
+                    alt={news.title}
                     className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-500"
                   />
                 ) : (
@@ -82,14 +82,14 @@ const NewsList = () => {
                   <p className="text-[9px] font-black text-slate-900 uppercase tracking-widest">{new Date(news.createdAt).toLocaleDateString('vi-VN')}</p>
                 </div>
               </div>
-              
+
               {/* Nội dung Card padding nhỏ lại */}
               <div className="p-5 flex-1 flex flex-col">
                 <p className="text-[9px] text-[#007db3] mb-2 font-bold uppercase tracking-widest truncate">
                   ĐĂNG BỞI: {news.author}
                 </p>
-                <h3 
-                  className="text-base font-black text-slate-900 mb-3 leading-snug line-clamp-2 group-hover:text-[#007db3] transition-colors cursor-pointer" 
+                <h3
+                  className="text-base font-black text-slate-900 mb-3 leading-snug line-clamp-2 group-hover:text-[#007db3] transition-colors cursor-pointer"
                   onClick={() => navigate(getDetailLink(news.id))}
                   title={news.title}
                 >
@@ -98,7 +98,7 @@ const NewsList = () => {
                 <p className="text-slate-600 text-xs font-medium line-clamp-2 mb-5 flex-1 leading-relaxed">
                   {news.content}
                 </p>
-                
+
                 {/* Footer Card */}
                 <div className="mt-auto pt-4 border-t border-slate-100 flex justify-between items-center">
                   <Link to={getDetailLink(news.id)} className="text-slate-900 text-[10px] font-black hover:text-[#007db3] transition-colors uppercase tracking-widest">
@@ -113,7 +113,7 @@ const NewsList = () => {
                   )}
                 </div>
               </div>
-              
+
             </div>
           ))}
         </div>
