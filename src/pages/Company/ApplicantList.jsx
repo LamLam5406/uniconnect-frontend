@@ -87,7 +87,7 @@ const ApplicantList = () => {
                 const profile = app.student?.StudentProfile || app.student?.StudentProfiles?.[0] || {};
                 const fullName = profile.full_name || 'Chưa cập nhật tên';
                 const email = app.student?.email || 'No email';
-                const cvUrl = app.cv_snapshot || null;
+                const cvUrl = (app.cv_snapshot && app.cv_snapshot.startsWith('http')) ? app.cv_snapshot : null;
                 
                 const isPending = app.status === 'pending';
                 const isAccepted = app.status === 'accepted';
