@@ -10,7 +10,8 @@ const axiosClient = axios.create({
 // Interceptor cho Request: Tự động đính kèm Token trước khi gửi lên Server
 axiosClient.interceptors.request.use(
   (config) => {
-    const token = localStorage.getItem('token');
+    // ĐỔI THÀNH sessionStorage
+    const token = sessionStorage.getItem('token');
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
@@ -30,7 +31,8 @@ axiosClient.interceptors.response.use(
   (error) => {
     // Nếu lỗi 401 (Unauthorized) do token hết hạn hoặc không hợp lệ
     if (error.response && error.response.status === 401) {
-      localStorage.removeItem('token');
+      // ĐỔI THÀNH sessionStorage
+      sessionStorage.removeItem('token');
       // Redirect về trang login (tùy thuộc vào cách bạn setup Router sau này)
       window.location.href = '/login'; 
     }

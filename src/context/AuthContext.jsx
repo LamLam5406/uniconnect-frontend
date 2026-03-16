@@ -11,7 +11,8 @@ export const AuthProvider = ({ children }) => {
   // Kiểm tra token mỗi khi load lại trang
   useEffect(() => {
     const checkAuth = () => {
-      const token = localStorage.getItem('token');
+      // ĐỔI THÀNH sessionStorage
+      const token = sessionStorage.getItem('token');
       if (token) {
         try {
           const decoded = jwtDecode(token);
@@ -36,12 +37,14 @@ export const AuthProvider = ({ children }) => {
   }, []);
 
   const login = (token, userData) => {
-    localStorage.setItem('token', token);
+    // ĐỔI THÀNH sessionStorage
+    sessionStorage.setItem('token', token);
     setUser(userData); // userData là object chứa { id, role }
   };
 
   const logout = () => {
-    localStorage.removeItem('token');
+    // ĐỔI THÀNH sessionStorage
+    sessionStorage.removeItem('token');
     setUser(null);
   };
 
