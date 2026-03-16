@@ -43,7 +43,7 @@ const JobDetail = () => {
   if (isLoading) return <div className="text-center mt-32 text-slate-500 font-bold uppercase tracking-widest text-sm">ĐANG TẢI DỮ LIỆU...</div>;
   if (!job) return null;
 
-  const companyProfile = job.company?.CompanyProfiles?.[0] || {};
+  const companyProfile = job.company?.CompanyProfiles || {};
   const companyName = companyProfile.company_name || job.company?.email || 'Công ty bảo mật tên';
   const logoUrl = companyProfile.logo_url || null;
   const isPastDeadline = job.deadline ? new Date(job.deadline) < new Date() : false;

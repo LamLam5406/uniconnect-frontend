@@ -322,7 +322,8 @@ const JobList = () => {
             <>
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-4">
                 {jobs.map((job) => {
-                  const companyName = job.company?.CompanyProfiles?.[0]?.company_name || job.company?.email || 'Công ty ẩn danh';
+                  const companyName = job.company?.CompanyProfile?.company_name || job.company?.email || 'Công ty ẩn danh';
+                  const logoUrl = job.company?.CompanyProfile?.logo_url || null;
                   const isPastDeadline = job.deadline ? new Date(job.deadline) < new Date() : false;
                   const isClosed = job.status === 'closed' || isPastDeadline;
                   const isUrgent = sortBy === 'deadline' && !isClosed;
@@ -340,8 +341,12 @@ const JobList = () => {
                       )}
 
                       <div className="mb-3">
-                        <div className={`w-12 h-12 rounded-xl flex items-center justify-center text-lg font-black uppercase border mb-2 ${isClosed ? 'bg-slate-50 border-slate-100 text-slate-300' : 'bg-[#007db3] border-[#007db3] text-white shadow-sm'}`}>
-                          {companyName.charAt(0)}
+                        <div className={`w-12 h-12 rounded-xl flex items-center justify-center text-lg font-black uppercase border mb-2 overflow-hidden ${isClosed ? 'bg-slate-50 border-slate-100 text-slate-300' : 'bg-[#007db3] border-[#007db3] text-white shadow-sm'}`}>
+                          {logoUrl ? (
+                            <img src={logoUrl} alt={companyName} className="w-full h-full object-contain bg-white" />
+                          ) : (
+                            companyName.charAt(0)
+                          )}
                         </div>
                         <p className="text-slate-500 text-[10px] font-bold uppercase tracking-wide truncate pr-6" title={companyName}>
                           {companyName}
