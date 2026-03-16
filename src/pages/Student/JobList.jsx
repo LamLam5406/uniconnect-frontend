@@ -8,8 +8,11 @@ const JobList = () => {
   const [loading, setLoading] = useState(true);
   const [applyingId, setApplyingId] = useState(null);
   
-  const [appliedJobs, setAppliedJobs] = useState([]); // State để lưu danh sách ID job đã ứng tuyển
-  
+  const [appliedJobs, setAppliedJobs] = useState(() => {
+    const saved = localStorage.getItem('uniconnect_applied_jobs');
+    return saved ? JSON.parse(saved) : [];
+  });
+
   // States cho Tìm kiếm, Bộ lọc & Sắp xếp
   const [searchTerm, setSearchTerm] = useState('');
   const [locationFilter, setLocationFilter] = useState('');
@@ -62,11 +65,26 @@ const JobList = () => {
       const response = await jobApi.applyJob(jobId);
       toast.success(response.message || 'Nộp đơn thành công!');
       
-      // Thêm jobId vào danh sách đã ứng tuyển để đổi màu nút
-      setAppliedJobs(prev => [...prev, jobId]); 
+      // Lưu vào state và LocalStorage
+      setAppliedJobs(prev => {
+        const newList = [...prev, jobId];
+        localStorage.setItem('uniconnect_applied_jobs', JSON.stringify(newList));
+        return newList;
+      }); 
     } catch (error) {
       const errorMsg = error.response?.data?.error || 'Có lỗi xảy ra khi nộp đơn!';
-      toast.error(errorMsg);
+      
+      // Bắt lỗi trùng lặp từ Backend để tự động cập nhật UI
+      if (errorMsg.toLowerCase().includes('đã nộp') || errorMsg.toLowerCase().includes('rồi')) {
+        setAppliedJobs(prev => {
+          const newList = [...prev, jobId];
+          localStorage.setItem('uniconnect_applied_jobs', JSON.stringify(newList));
+          return newList;
+        });
+        toast.success('Hệ thống ghi nhận bạn đã ứng tuyển job này từ trước!');
+      } else {
+        toast.error(errorMsg);
+      }
     } finally {
       setApplyingId(null);
     }

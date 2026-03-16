@@ -62,6 +62,9 @@ const PortalLayout = ({ role }) => {
   const location = useLocation();
 
   const handleLogout = () => {
+    // XÓA LỊCH SỬ APPLY TRONG LOCAL STORAGE KHI ĐĂNG XUẤT
+    localStorage.removeItem('uniconnect_applied_jobs'); 
+    
     logout();
     navigate('/login');
   };

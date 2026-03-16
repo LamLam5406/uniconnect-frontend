@@ -9,7 +9,15 @@ const JobDetail = () => {
   const [job, setJob] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isApplying, setIsApplying] = useState(false);
-  const [hasApplied, setHasApplied] = useState(false); // Thêm state kiểm tra đã ứng tuyển chưa
+  const [hasApplied, setHasApplied] = useState(() => {
+    const saved = localStorage.getItem('uniconnect_applied_jobs');
+    if (saved) {
+      const jobs = JSON.parse(saved);
+      // id từ URL là chuỗi, nên cần check cả dạng chuỗi và số
+      return jobs.includes(id) || jobs.includes(Number(id)) || jobs.includes(String(id));
+    }
+    return false;
+  });
 
   useEffect(() => {
     fetchJobDetail();
@@ -32,9 +40,23 @@ const JobDetail = () => {
     try {
       const response = await jobApi.applyJob(id);
       toast.success(response.message || 'Nộp đơn thành công!');
-      setHasApplied(true); // Cập nhật trạng thái thành Đã ứng tuyển
+      
+      setHasApplied(true);
+      // Lưu vào LocalStorage
+      const saved = JSON.parse(localStorage.getItem('uniconnect_applied_jobs') || '[]');
+      localStorage.setItem('uniconnect_applied_jobs', JSON.stringify([...saved, id]));
+
     } catch (error) {
-      toast.error(error.response?.data?.error || 'Có lỗi xảy ra khi nộp đơn!');
+      const errorMsg = error.response?.data?.error || 'Có lỗi xảy ra khi nộp đơn!';
+      
+      if (errorMsg.toLowerCase().includes('đã nộp') || errorMsg.toLowerCase().includes('rồi')) {
+        setHasApplied(true);
+        const saved = JSON.parse(localStorage.getItem('uniconnect_applied_jobs') || '[]');
+        localStorage.setItem('uniconnect_applied_jobs', JSON.stringify([...saved, id]));
+        toast.success('Hệ thống ghi nhận bạn đã ứng tuyển công việc này từ trước!');
+      } else {
+        toast.error(errorMsg);
+      }
     } finally {
       setIsApplying(false);
     }
